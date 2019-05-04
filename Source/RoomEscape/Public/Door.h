@@ -8,6 +8,7 @@
 #include "Door.generated.h"
 
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ROOMESCAPE_API UDoor : public UActorComponent
 {
@@ -24,15 +25,17 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void OpenDoor();
+	void CloseDoor();
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = 90.0f;
+	float OpenAngle = 70.0f;
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
-<<<<<<< HEAD
-=======
-
+	UPROPERTY(EditAnywhere)
+	float DoorCloseDelay = 1.0f;
+	float LastDoorOpenTime;
 	AActor* ActorThatOpens;
->>>>>>> ad91499... Cleaned up repo, learned about top to bottom inheritance
+	AActor* Owner;
 };

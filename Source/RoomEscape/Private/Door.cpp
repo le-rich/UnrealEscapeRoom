@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Door.h"
-#include "GameFramework/Actor.h"
-#include "Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 
 // Sets default values for this component's properties
 UDoor::UDoor()
@@ -19,18 +19,20 @@ UDoor::UDoor()
 void UDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-<<<<<<< HEAD
-=======
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	Owner = GetOwner();
 }
 
 void UDoor::OpenDoor()
 {
->>>>>>> ad91499... Cleaned up repo, learned about top to bottom inheritance
-	AActor * Owner = GetOwner();
+	FRotator NewRotation = FRotator(0.f, OpenAngle, 0.f);
 
-	FRotator NewRotation = FRotator(0.f, 70.0f, 0.f);
+	Owner->SetActorRotation(NewRotation);
+}
+
+void UDoor::CloseDoor()
+{
+	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
 
 	Owner->SetActorRotation(NewRotation);
 }
@@ -40,7 +42,14 @@ void UDoor::OpenDoor()
 void UDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	if (PressurePlate->IsOverlappingActor(ActorThatOpens)) {
+		OpenDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	}
+	
+	//Check if it's time to close the door.
+	if (GetWorld()->GetTimeSeconds() > (LastDoorOpenTime + DoorCloseDelay)) {
+		CloseDoor();
+	}
 }
 
