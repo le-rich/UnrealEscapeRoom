@@ -21,8 +21,34 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	FindPhysicsComponent();
+	FindInputHandler();
+}
+
+void UGrabber::FindInputHandler()
+{
+	//Look for attached Input Handler
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent) {
+		//Input Component was found
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No input handler component found on %s"), *GetOwner()->GetName());
+	}
+}
+
+void UGrabber::FindPhysicsComponent()
+{
+	//Look for attached Physics Handle
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle) {
+		//Physics Handle is found
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No physics handle component found on %s"), *GetOwner()->GetName());
+	}
 }
 
 
@@ -54,5 +80,13 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FString actorName = LineTraceHit.GetActor()->GetName();
 		UE_LOG(LogTemp, Warning, TEXT("Grabbing: %s"), *actorName);
 	}
+}
+
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("What's up fuckers"));
+}
+
+void UGrabber::Release() {
+	UE_LOG(LogTemp, Warning, TEXT("Grab Key Released"));
 }
 

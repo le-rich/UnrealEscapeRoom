@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
 #include "Grabber.generated.h"
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -20,12 +23,20 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void FindInputHandler();
+
+	void FindPhysicsComponent();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	float Reach = 100.0f;
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComponent = nullptr;
 
-	
+	//Raycast and grab what's in reach.
+	void Grab();
+	void Release();
 };
