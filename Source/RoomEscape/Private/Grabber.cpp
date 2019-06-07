@@ -20,6 +20,7 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
+
 	SetupInputComponent();
 	FindPhysicsHandleComponent();
 }
